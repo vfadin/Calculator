@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".FirstFragment">
+    tools:context=".ui.FirstFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:id="@+id/text_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="48dp"
+            android:maxHeight="50dp"
             app:layout_constraintBottom_toTopOf="@id/keyboard"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="SpeakableTextPresentCheck" />

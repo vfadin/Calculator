@@ -1,4 +1,4 @@
-package com.example.calculator
+package com.example.calculator.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +13,7 @@ open class KeyboardRecyclerViewAdapter :
     private var buttonHeight = 100
 
     interface OnItemClickListener {
-        fun onItemClick(position: String)
+        fun onItemClick(value: String)
     }
 
     fun updateData(datalist: List<String>) {
@@ -57,7 +57,7 @@ open class KeyboardRecyclerViewAdapter :
     override fun getItemCount() = datalist.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(datalist.get(position))
+        holder.bind(datalist.getOrElse(position) { "" })
     }
 
 }
