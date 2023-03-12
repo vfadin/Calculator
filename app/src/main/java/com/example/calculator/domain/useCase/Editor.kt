@@ -2,6 +2,7 @@ package com.example.calculator.domain.useCase
 
 import com.example.calculator.domain.useCase.pNumber.Convert10p.Companion.intToChar
 import com.example.calculator.domain.useCase.pNumber.ConvertP10.Companion.charToInt
+import com.example.calculator.utils.Constants.Companion.OPERATORS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -9,13 +10,13 @@ abstract class Editor {
     private val delimiter = "."
     private val zero = "0"
     private val operators = "+-/*"
-    private val _expression = MutableStateFlow("0")
+    protected val _expression = MutableStateFlow("0")
     val expression = _expression.asStateFlow()
 
     fun addOperator(operator: Char): String {
         if (operators.contains(operator)) {
             if (operators.contains(_expression.value.last())) bs()
-            _expression.value += operator
+            if (!_expression.value.contains(OPERATORS)) _expression.value += operator
         }
         return _expression.value
     }

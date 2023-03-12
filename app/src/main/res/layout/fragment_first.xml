@@ -13,12 +13,21 @@
         app:layout_constraintBottom_toTopOf="@id/text_input_layout"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/text_view_last_operation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="1 + 1"
+        app:layout_constraintBottom_toTopOf="@id/text_input_layout"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="8dp"
-        app:layout_constraintBottom_toTopOf="@id/keyboard"
+        app:layout_constraintBottom_toTopOf="@id/slider"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -26,10 +35,49 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxHeight="50dp"
-            app:layout_constraintBottom_toTopOf="@id/keyboard"
+            app:layout_constraintBottom_toTopOf="@id/slider"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stepSize="1.0"
+        android:valueFrom="2.0"
+        android:valueTo="16.0"
+        app:layout_constraintBottom_toTopOf="@id/button_equal"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_equal"
+        android:layout_width="66dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape"
+        android:text="="
+        app:layout_constraintBottom_toTopOf="@id/keyboard"
+        app:layout_constraintEnd_toStartOf="@id/button_cancel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_cancel"
+        android:layout_width="66dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape"
+        android:paddingHorizontal="16dp"
+        android:text="C"
+        app:layout_constraintBottom_toTopOf="@id/keyboard"
+        app:layout_constraintStart_toEndOf="@id/button_equal" />
+
+    <Button
+        android:id="@+id/button_bs"
+        android:layout_width="66dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape"
+        android:text="BS"
+        app:layout_constraintBottom_toTopOf="@id/keyboard"
+        app:layout_constraintStart_toEndOf="@id/button_cancel" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/keyboard"
@@ -37,6 +85,6 @@
         android:layout_height="wrap_content"
         android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.calculator.databinding.FragmentFirstBinding
+import com.google.android.material.slider.Slider
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class FirstFragment : Fragment() {
 
@@ -32,6 +34,11 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         bindUi()
         lifecycleScope.launch {
+            launch {
+                viewModel.lastOperation.collect {
+                    binding.textViewLastOperation.text = it
+                }
+            }
             viewModel.pNumberEditor.expression.collect {
                 binding.textField.setText(it)
             }
@@ -40,10 +47,45 @@ class FirstFragment : Fragment() {
 
     private fun bindUi() {
         val width = requireContext().applicationContext.resources.displayMetrics.widthPixels
+        val height = (width - 32) / SPAN_COUNT
         with(binding) {
+            slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                override fun onStartTrackingTouch(slider: Slider) {
+                    viewModel.pNumberEditor.clear()
+                }
+
+                override fun onStopTrackingTouch(slider: Slider) {
+                    viewModel.pNumberEditor.base = slider.value.roundToInt()
+                }
+            })
+            buttonBs.layoutParams.let {
+                it.width = height
+                it.height = height
+            }
+            buttonEqual.apply {
+                layoutParams.let {
+                    it.width = height
+                    it.height = height
+                }
+                setOnClickListener { viewModel.onEqualClick() }
+            }
+            buttonBs.apply {
+                layoutParams.let {
+                    it.width = height
+                    it.height = height
+                }
+                setOnClickListener { viewModel.onBsClick() }
+            }
+            buttonCancel.apply {
+                layoutParams.let {
+                    it.width = height
+                    it.height = height
+                }
+                setOnClickListener { viewModel.onCancelClick() }
+            }
             keyboard.adapter = adapter
             keyboard.layoutManager = GridLayoutManager(requireContext(), SPAN_COUNT)
-            adapter.setButtonHeight((width - 32) / SPAN_COUNT)
+            adapter.setButtonHeight(height)
             adapter.updateData(viewModel.pNumberEditor.keyboardValues)
             adapter.setOnItemClickListener(
                 object : KeyboardRecyclerViewAdapter.OnItemClickListener {
