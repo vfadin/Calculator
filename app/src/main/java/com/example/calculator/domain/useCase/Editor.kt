@@ -13,7 +13,7 @@ abstract class Editor {
     protected val _expression = MutableStateFlow("0")
     val expression = _expression.asStateFlow()
 
-    fun addOperator(operator: Char): String {
+    open fun addOperator(operator: Char): String {
         if (operators.contains(operator)) {
             if (operators.contains(_expression.value.last())) bs()
             if (!_expression.value.contains(OPERATORS)) _expression.value += operator
@@ -21,7 +21,7 @@ abstract class Editor {
         return _expression.value
     }
 
-    fun addDigit(n: Int): String {
+    open fun addDigit(n: Int): String {
         if (n !in 0..15) {
             throw IndexOutOfBoundsException()
         }
@@ -40,7 +40,7 @@ abstract class Editor {
 
     fun addZero() = addDigit(0)
 
-    fun addDelim(): String {
+    open fun addDelim(): String {
         if (_expression.value.isNotEmpty() && !_expression.value.contains(delimiter)) {
             _expression.value += delimiter
         }

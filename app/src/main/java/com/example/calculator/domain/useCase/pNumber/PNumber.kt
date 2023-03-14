@@ -4,8 +4,9 @@ import com.example.calculator.domain.useCase.INumber
 import com.example.calculator.domain.useCase.pNumber.ConvertP10.Companion.dval
 
 class PNumber(number: String, base: Int) : INumber {
+    private var base = 2
     var number = .0
-    var base = 2
+        private set
 
     init {
         this.base = base
