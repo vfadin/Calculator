@@ -18,7 +18,7 @@ class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
     private val adapter = KeyboardRecyclerViewAdapter()
-    private val SPAN_COUNT = 4
+    private val SPAN_COUNT = 5
     private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreateView(
