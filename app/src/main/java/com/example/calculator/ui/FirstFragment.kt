@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -53,7 +54,7 @@ class FirstFragment : Fragment() {
                     launch {
                         val height = (width - 32.dp) / ed.SPAN_COUNT
                         buttonEqualLayout.layoutParams.let {
-                            it.width = height
+                            it.width = height * (ed.SPAN_COUNT - 2)
                             it.height = height
                         }
                         buttonEqual.setOnClickListener { viewModel.onEqualClick() }
@@ -79,6 +80,8 @@ class FirstFragment : Fragment() {
                                     ed.setBase(slider.value.roundToInt())
                                 }
                             })
+                        } else {
+                            slider.visibility = GONE
                         }
                         keyboard.adapter = adapter
                         adapter.setButtonHeight(height)
@@ -123,6 +126,6 @@ class FirstFragment : Fragment() {
         _binding = null
     }
 
-    val Int.dp: Int
-        get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+    private val Int.dp: Int
+        get() = (this * Resources.getSystem().displayMetrics.density).roundToInt()
 }

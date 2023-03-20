@@ -1,13 +1,12 @@
 package com.example.calculator.domain.useCase.pNumber
 
 import com.example.calculator.domain.useCase.Editor
-import com.example.calculator.domain.useCase.pNumber.Convert10p.Companion.doP
 
 class PNumberEditor : Editor() {
     override val SPAN_COUNT = 5
     override val keyboardValues = listOf(
-        "F", "E", "D", "C", "/", "B", "A", "9", "8", "*", "7", "6", "5", "4", "-", "3", "2", "1",
-        ".", "+"
+        "C", "D", "E", "F", "/", "8", "9", "A", "B", "*", "4", "5", "6", "7", "-", "0",
+        "1", "2", "3", "+", "."
     )
     var base = 16
         private set
