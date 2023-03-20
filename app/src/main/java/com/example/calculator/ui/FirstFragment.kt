@@ -2,8 +2,9 @@ package com.example.calculator.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,15 +42,73 @@ class FirstFragment : Fragment() {
                     binding.textViewLastOperation.text = it
                 }
             }
-            viewModel.editor.expression.collect {
-                binding.textField.setText(it)
-            }
         }
     }
 
     private fun bindUi() {
-        val width = requireContext().applicationContext.resources.displayMetrics.widthPixels
-        val height = (width - 32) / viewModel.editor.SPAN_COUNT
+        with(binding){
+            lifecycleScope.launch {
+                viewModel._editor.collect { ed ->
+                    launch {
+                        ed.expression.collect {
+                            binding.textField.setText(it)
+                        }
+                    }
+                    launch {
+                        val width = requireContext().applicationContext.resources.displayMetrics.widthPixels
+                        val height = (width - 32) / ed.SPAN_COUNT
+                        buttonBs.layoutParams.let {
+                            it.width = height
+                            it.height = height
+                        }
+                        buttonEqual.apply {
+                            layoutParams.let {
+                                it.width = height
+                                it.height = height
+                            }
+                            setOnClickListener { viewModel.onEqualClick() }
+                        }
+                        buttonBs.apply {
+                            layoutParams.let {
+                                it.width = height
+                                it.height = height
+                            }
+                            setOnClickListener { viewModel.onBsClick() }
+                        }
+                        buttonCancel.apply {
+                            layoutParams.let {
+                                it.width = height
+                                it.height = height
+                            }
+                            setOnClickListener { viewModel.onCancelClick() }
+                        }
+                        if(ed is PNumberEditor) {
+                            slider.visibility = VISIBLE
+                            slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                                override fun onStartTrackingTouch(slider: Slider) {
+                                    ed.clear()
+                                }
+
+                                override fun onStopTrackingTouch(slider: Slider) {
+                                    ed.base = slider.value.roundToInt()
+                                }
+                            })
+                        }
+                        keyboard.adapter = adapter
+                        adapter.setButtonHeight(height)
+                        adapter.setOnItemClickListener(
+                            object : KeyboardRecyclerViewAdapter.OnItemClickListener {
+                                override fun onItemClick(value: String) {
+                                    viewModel.onKeyboardClick(value.first())
+                                }
+                            })
+                        keyboard.layoutManager =
+                            GridLayoutManager(requireContext(), ed.SPAN_COUNT)
+                    }
+                    adapter.updateData(ed.keyboardValues)
+                }
+            }
+        }
         with(binding) {
             toolbar.inflateMenu(R.menu.menu_main)
             toolbar.setOnMenuItemClickListener {
@@ -65,51 +124,6 @@ class FirstFragment : Fragment() {
                     else -> false
                 }
             }
-            slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                override fun onStartTrackingTouch(slider: Slider) {
-                    viewModel.editor.clear()
-                }
-
-                override fun onStopTrackingTouch(slider: Slider) {
-                    (viewModel.editor as PNumberEditor).base = slider.value.roundToInt()
-                }
-            })
-            buttonBs.layoutParams.let {
-                it.width = height
-                it.height = height
-            }
-            buttonEqual.apply {
-                layoutParams.let {
-                    it.width = height
-                    it.height = height
-                }
-                setOnClickListener { viewModel.onEqualClick() }
-            }
-            buttonBs.apply {
-                layoutParams.let {
-                    it.width = height
-                    it.height = height
-                }
-                setOnClickListener { viewModel.onBsClick() }
-            }
-            buttonCancel.apply {
-                layoutParams.let {
-                    it.width = height
-                    it.height = height
-                }
-                setOnClickListener { viewModel.onCancelClick() }
-            }
-            keyboard.adapter = adapter
-            keyboard.layoutManager =
-                GridLayoutManager(requireContext(), viewModel.editor.SPAN_COUNT)
-            adapter.setButtonHeight(height)
-            adapter.updateData(viewModel.editor.keyboardValues)
-            adapter.setOnItemClickListener(
-                object : KeyboardRecyclerViewAdapter.OnItemClickListener {
-                    override fun onItemClick(value: String) {
-                        viewModel.onKeyboardClick(value.first())
-                    }
-                })
         }
     }
 

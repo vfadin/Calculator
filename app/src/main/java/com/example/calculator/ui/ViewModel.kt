@@ -11,23 +11,27 @@ import com.example.calculator.domain.useCase.processor.Processor
 import com.example.calculator.utils.Constants.Companion.OPERATORS
 import com.example.calculator.utils.Constants.Companion.OPERATORS_FRACTION
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    var editor: Editor = FractionNumberEditor()
-        private set
+//    var editor: Editor = FractionNumberEditor()
+//        private set
+    val editor = MutableStateFlow<Editor>(FractionNumberEditor())
+    val _editor = editor.asStateFlow()
     private val processor = Processor()
     val lastOperation = processor.lastOperation
 
-    fun onKeyboardClick(char: Char) = editor.doEdit(char)
+    fun onKeyboardClick(char: Char) = editor.value.doEdit(char)
 
-    fun onBsClick() = editor.bs()
+    fun onBsClick() = editor.value.bs()
 
-    fun onCancelClick() = editor.clear()
+    fun onCancelClick() = editor.value.clear()
 
     fun onEqualClick() {
-        when (editor) {
+        when (editor.value) {
             is PNumberEditor -> {
                 calculatePNumber()
             }
@@ -39,15 +43,15 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     private fun calculateFractionNumber() {
         var splitIndex = 0
-        editor.expression.value.forEachIndexed { index, c ->
+        editor.value.expression.value.forEachIndexed { index, c ->
             if (c.toString().matches(OPERATORS_FRACTION)) {
                 splitIndex = index
             }
         }
         if (splitIndex != 0) {
-            val leftOperand = editor.expression.value.substring(0 until splitIndex).split('/')
-            val rightOperand = editor.expression.value.substring(splitIndex + 1).split('/')
-            val operator = editor.expression.value.getOrElse(splitIndex) { '+' }
+            val leftOperand = editor.value.expression.value.substring(0 until splitIndex).split('/')
+            val rightOperand = editor.value.expression.value.substring(splitIndex + 1).split('/')
+            val operator = editor.value.expression.value.getOrElse(splitIndex) { '+' }
             calculate(
                 FractionNumber(
                     leftOperand.getOrElse(0) { "0" }.toLong(),
@@ -63,11 +67,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun calculatePNumber() {
-        val slices = editor.expression.value.split(OPERATORS)
-        val operator = editor.expression.value.find { it.toString().matches(OPERATORS) }
+        val slices = editor.value.expression.value.split(OPERATORS)
+        val operator = editor.value.expression.value.find { it.toString().matches(OPERATORS) }
         calculate(
-            PNumber(slices.getOrElse(0) { "0" }, (editor as PNumberEditor).base),
-            PNumber(slices.getOrElse(1) { "0" }, (editor as PNumberEditor).base),
+            PNumber(slices.getOrElse(0) { "0" }, (editor.value as PNumberEditor).base),
+            PNumber(slices.getOrElse(1) { "0" }, (editor.value as PNumberEditor).base),
             operator
         )
     }
@@ -76,16 +80,18 @@ class MainViewModel @Inject constructor() : ViewModel() {
         when (val answer = processor.calculate(
             leftOperand, rightOperand, operator ?: '+'
         )) {
-            is PNumber -> (editor as PNumberEditor).setValue(answer, (editor as PNumberEditor))
-            is FractionNumber -> editor.setValue(answer)
+            is PNumber -> (editor.value as PNumberEditor).setValue(answer, (editor.value as PNumberEditor))
+            is FractionNumber -> editor.value.setValue(answer)
         }
     }
 
     fun setFractionEditor() {
-        editor = FractionNumberEditor()
+        processor.clear()
+        editor.value = FractionNumberEditor()
     }
 
     fun setPNumberEditor() {
-        editor = PNumberEditor()
+        processor.clear()
+        editor.value = PNumberEditor()
     }
 }

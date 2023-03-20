@@ -21,4 +21,8 @@ class Processor {
         }
         return answer
     }
+
+     fun clear() {
+         _lastOperation.value = ""
+     }
 }

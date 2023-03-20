@@ -44,7 +44,4 @@ class ComplexNumber(real: Double, imaginary: Double) : INumber {
         return ComplexNumber(newReal, newImaginary)
     }
 
-    override fun SetString(str: String) {
-        TODO("Not yet implemented")
-    }
 }
