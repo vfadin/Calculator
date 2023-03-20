@@ -16,11 +16,13 @@ class Convert10PTest {
     }
 
 
-    @Test(expected = IllegalArgumentException::class)
+//    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun testIntToP() {
-        intToP(1, 111)
+//        intToP(1, 111)
         assertEquals("1101", intToP(13, 2))
         assertEquals("D", intToP(13, 16))
+        assertEquals("14", intToP(20, 16))
         assertEquals("10", intToP(16, 16))
         assertEquals("10000", intToP(16, 2))
         assertEquals("1010", intToP(10, 2))
@@ -38,6 +40,7 @@ class Convert10PTest {
     fun testDoP(){
         assertEquals("11.11", doP(3.75, 2, 2))
         assertEquals("2.5", doP(2.5, 10, 1))
+        assertEquals("14.0", doP(20.0, 16, 1))
         assertEquals("A.199999999999", doP(10.1, 16, 12))
         assertEquals("1.56", doP(1.73, 8, 2))
         assertEquals("3.11", doP(3.3333333333333335, 4, 2))

@@ -1,6 +1,7 @@
 package com.example.calculator.domain.useCase.pNumber
 
 import com.example.calculator.domain.useCase.Editor
+import com.example.calculator.domain.useCase.pNumber.Convert10p.Companion.doP
 
 class PNumberEditor : Editor() {
     override val SPAN_COUNT = 5
@@ -8,7 +9,7 @@ class PNumberEditor : Editor() {
         "F", "E", "D", "C", "/", "B", "A", "9", "8", "*", "7", "6", "5", "4", "-", "3", "2", "1",
         ".", "+"
     )
-    var base = 2
+    var base = 16
         private set
 
     override fun addDigit(n: Int): String {
@@ -24,7 +25,7 @@ class PNumberEditor : Editor() {
     }
 
     fun setValue(number: PNumber, editor: PNumberEditor) {
-        _expression.value = Convert10p.doP(number.number, editor.base, editor.acc())
+        _expression.value = number.toString()
     }
 
     fun setBase(base: Int) {

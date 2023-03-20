@@ -42,9 +42,9 @@ abstract class Editor {
     }
 
     fun acc() =
-        if (_expression.value.contains(delimiter)) _expression.value.length - _expression.value.indexOf(
-            delimiter
-        ) - 1 else 0
+        if (_expression.value.contains(delimiter))
+            _expression.value.length - _expression.value.indexOf(delimiter) - 1
+        else 0
 
     fun addZero() = addDigit(0)
 
