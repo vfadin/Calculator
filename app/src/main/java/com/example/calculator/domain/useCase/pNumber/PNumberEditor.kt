@@ -3,14 +3,15 @@ package com.example.calculator.domain.useCase.pNumber
 import com.example.calculator.domain.useCase.Editor
 
 class PNumberEditor : Editor() {
-
+    override val SPAN_COUNT = 5
     var base = 2
 
-    fun setValue(answer: String) {
-        _expression.value = answer
+    fun setValue(number: PNumber, editor: PNumberEditor) {
+        _expression.value = Convert10p.doP(number.number, editor.base, editor.acc())
     }
 
-    val keyboardValues = listOf(
-        "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", ".", "+", "A", "B","C", "D", "E", "F"
+    override val keyboardValues = listOf(
+        "F", "E", "D", "C", "/", "B", "A", "9", "8", "*", "7", "6", "5", "4", "-", "3", "2", "1",
+        ".", "+"
     )
 }

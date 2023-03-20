@@ -13,14 +13,13 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
         this.denominator = denominator
     }
 
-
     override fun plus(a: INumber): INumber {
         if ((a as FractionNumber).denominator == 0L) return this
         if (denominator == 0L) return a
         val cDenominator = lcm(a.denominator, denominator)
         val cNumerator = a.numerator * (cDenominator / a.denominator) +
                 numerator * (cDenominator / denominator)
-        return FractionNumber(cNumerator, cDenominator)
+        return simplify(FractionNumber(cNumerator, cDenominator))
     }
 
     override fun minus(a: INumber): INumber {
@@ -32,7 +31,7 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
         val cDenominator: Long = lcm(a.denominator, denominator)
         val cNumerator: Long = a.numerator * (cDenominator / a.denominator) -
                 numerator * (cDenominator / denominator)
-        return FractionNumber(cNumerator, cDenominator)
+        return simplify(FractionNumber(cNumerator, cDenominator))
     }
 
     override fun div(a: INumber): INumber {
@@ -62,10 +61,6 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
         c.numerator /= d
         c.denominator /= d
         return c
-    }
-
-    override fun SetString(str: String) {
-        TODO("Not yet implemented")
     }
 
     override fun toString(): String {

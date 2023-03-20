@@ -7,11 +7,19 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 abstract class Editor {
-    private val delimiter = "."
+    protected open val delimiter = '.'
     private val zero = "0"
     private val operators = "+-/*"
     protected val _expression = MutableStateFlow("0")
     val expression = _expression.asStateFlow()
+    open val keyboardValues = listOf(
+        "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", ".", "+"
+    )
+    open val SPAN_COUNT = 4
+
+    open fun setValue(number: INumber) {
+        _expression.value = number.toString()
+    }
 
     open fun addOperator(operator: Char): String {
         if (operators.contains(operator)) {
@@ -61,7 +69,7 @@ abstract class Editor {
         return _expression.value
     }
 
-    fun doEdit(c: Char) = if (c == '.') {
+    fun doEdit(c: Char) = if (c == delimiter) {
         addDelim()
     } else if (operators.contains(c)) {
         addOperator(c)

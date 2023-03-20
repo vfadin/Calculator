@@ -2,13 +2,16 @@ package com.example.calculator.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.calculator.R
 import com.example.calculator.databinding.FragmentFirstBinding
+import com.example.calculator.domain.useCase.pNumber.PNumberEditor
 import com.google.android.material.slider.Slider
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -18,7 +21,6 @@ class FirstFragment : Fragment() {
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
     private val adapter = KeyboardRecyclerViewAdapter()
-    private val SPAN_COUNT = 5
     private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreateView(
@@ -39,7 +41,7 @@ class FirstFragment : Fragment() {
                     binding.textViewLastOperation.text = it
                 }
             }
-            viewModel.pNumberEditor.expression.collect {
+            viewModel.editor.expression.collect {
                 binding.textField.setText(it)
             }
         }
@@ -47,15 +49,29 @@ class FirstFragment : Fragment() {
 
     private fun bindUi() {
         val width = requireContext().applicationContext.resources.displayMetrics.widthPixels
-        val height = (width - 32) / SPAN_COUNT
+        val height = (width - 32) / viewModel.editor.SPAN_COUNT
         with(binding) {
+            toolbar.inflateMenu(R.menu.menu_main)
+            toolbar.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.action_fraction -> {
+                        viewModel.setFractionEditor()
+                        true
+                    }
+                    R.id.action_pnumber -> {
+                        viewModel.setPNumberEditor()
+                        true
+                    }
+                    else -> false
+                }
+            }
             slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {
-                    viewModel.pNumberEditor.clear()
+                    viewModel.editor.clear()
                 }
 
                 override fun onStopTrackingTouch(slider: Slider) {
-                    viewModel.pNumberEditor.base = slider.value.roundToInt()
+                    (viewModel.editor as PNumberEditor).base = slider.value.roundToInt()
                 }
             })
             buttonBs.layoutParams.let {
@@ -84,9 +100,10 @@ class FirstFragment : Fragment() {
                 setOnClickListener { viewModel.onCancelClick() }
             }
             keyboard.adapter = adapter
-            keyboard.layoutManager = GridLayoutManager(requireContext(), SPAN_COUNT)
+            keyboard.layoutManager =
+                GridLayoutManager(requireContext(), viewModel.editor.SPAN_COUNT)
             adapter.setButtonHeight(height)
-            adapter.updateData(viewModel.pNumberEditor.keyboardValues)
+            adapter.updateData(viewModel.editor.keyboardValues)
             adapter.setOnItemClickListener(
                 object : KeyboardRecyclerViewAdapter.OnItemClickListener {
                     override fun onItemClick(value: String) {

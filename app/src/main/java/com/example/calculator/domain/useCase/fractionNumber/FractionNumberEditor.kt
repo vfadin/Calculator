@@ -2,30 +2,32 @@ package com.example.calculator.domain.useCase.fractionNumber
 
 import com.example.calculator.domain.useCase.Editor
 import com.example.calculator.utils.Constants
+import com.example.calculator.utils.Constants.Companion.OPERATORS
+import com.example.calculator.utils.Constants.Companion.OPERATORS_FRACTION
 
-class FractionNumberEditor: Editor() {
-    private val delimiter = '/'
+class FractionNumberEditor : Editor() {
+    override val delimiter = '/'
     private val operators = "+-*"
 
     fun setValue(answer: String) {
         _expression.value = answer
     }
 
-    val keyboardValues = listOf(
-        "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", "+"
-    )
-
     override fun addDelim(): String {
-        if (_expression.value.isNotEmpty() && !_expression.value.contains(delimiter)) {
-            _expression.value += delimiter
+        return _expression.value.apply {
+            if(isNotEmpty() && last() != delimiter && count { it == delimiter } < 2)
+                _expression.value += delimiter
         }
-        return _expression.value
     }
 
     override fun addOperator(operator: Char): String {
         if (operators.contains(operator)) {
             if (operators.contains(_expression.value.last())) bs()
-            if (!_expression.value.contains(Constants.OPERATORS)) _expression.value += operator
+            _expression.value.apply {
+                if(!contains(OPERATORS_FRACTION) && contains(delimiter)) {
+                    _expression.value += operator
+                }
+            }
         }
         return _expression.value
     }

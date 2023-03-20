@@ -32,8 +32,4 @@ class PNumber(number: String, base: Int) : INumber {
     override fun times(a: INumber): INumber {
         return PNumber((number * (a as PNumber).number).toString(), base)
     }
-
-    override fun SetString(str: String) {
-        TODO("Not yet implemented")
-    }
 }
