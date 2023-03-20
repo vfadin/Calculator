@@ -1,5 +1,6 @@
 package com.example.calculator.ui
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -50,11 +51,7 @@ class FirstFragment : Fragment() {
                 val width = requireContext().applicationContext.resources.displayMetrics.widthPixels
                 viewModel.editorStateFlow.collect { ed ->
                     launch {
-                        val height = (width - 32) / ed.SPAN_COUNT
-                        buttonBs.layoutParams.let {
-                            it.width = height
-                            it.height = height
-                        }
+                        val height = (width - 32.dp) / ed.SPAN_COUNT
                         buttonEqualLayout.layoutParams.let {
                             it.width = height
                             it.height = height
@@ -125,4 +122,7 @@ class FirstFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    val Int.dp: Int
+        get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 }
