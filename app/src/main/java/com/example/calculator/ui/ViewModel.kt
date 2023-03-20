@@ -17,21 +17,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-//    var editor: Editor = FractionNumberEditor()
-//        private set
-    val editor = MutableStateFlow<Editor>(FractionNumberEditor())
-    val _editor = editor.asStateFlow()
+    private val _editorStateFlow = MutableStateFlow<Editor>(FractionNumberEditor())
+    val editorStateFlow = _editorStateFlow.asStateFlow()
     private val processor = Processor()
     val lastOperation = processor.lastOperation
 
-    fun onKeyboardClick(char: Char) = editor.value.doEdit(char)
+    fun onKeyboardClick(char: Char) = _editorStateFlow.value.doEdit(char)
 
-    fun onBsClick() = editor.value.bs()
+    fun onBsClick() = _editorStateFlow.value.bs()
 
-    fun onCancelClick() = editor.value.clear()
+    fun onCancelClick() = _editorStateFlow.value.clear()
 
     fun onEqualClick() {
-        when (editor.value) {
+        println(213)
+        when (_editorStateFlow.value) {
             is PNumberEditor -> {
                 calculatePNumber()
             }
@@ -43,15 +42,17 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     private fun calculateFractionNumber() {
         var splitIndex = 0
-        editor.value.expression.value.forEachIndexed { index, c ->
+        _editorStateFlow.value.expression.value.forEachIndexed { index, c ->
             if (c.toString().matches(OPERATORS_FRACTION)) {
                 splitIndex = index
             }
         }
         if (splitIndex != 0) {
-            val leftOperand = editor.value.expression.value.substring(0 until splitIndex).split('/')
-            val rightOperand = editor.value.expression.value.substring(splitIndex + 1).split('/')
-            val operator = editor.value.expression.value.getOrElse(splitIndex) { '+' }
+            val leftOperand =
+                _editorStateFlow.value.expression.value.substring(0 until splitIndex).split('/')
+            val rightOperand =
+                _editorStateFlow.value.expression.value.substring(splitIndex + 1).split('/')
+            val operator = _editorStateFlow.value.expression.value.getOrElse(splitIndex) { '+' }
             calculate(
                 FractionNumber(
                     leftOperand.getOrElse(0) { "0" }.toLong(),
@@ -67,11 +68,12 @@ class MainViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun calculatePNumber() {
-        val slices = editor.value.expression.value.split(OPERATORS)
-        val operator = editor.value.expression.value.find { it.toString().matches(OPERATORS) }
+        val slices = _editorStateFlow.value.expression.value.split(OPERATORS)
+        val operator =
+            _editorStateFlow.value.expression.value.find { it.toString().matches(OPERATORS) }
         calculate(
-            PNumber(slices.getOrElse(0) { "0" }, (editor.value as PNumberEditor).base),
-            PNumber(slices.getOrElse(1) { "0" }, (editor.value as PNumberEditor).base),
+            PNumber(slices.getOrElse(0) { "0" }, (_editorStateFlow.value as PNumberEditor).base),
+            PNumber(slices.getOrElse(1) { "0" }, (_editorStateFlow.value as PNumberEditor).base),
             operator
         )
     }
@@ -80,18 +82,25 @@ class MainViewModel @Inject constructor() : ViewModel() {
         when (val answer = processor.calculate(
             leftOperand, rightOperand, operator ?: '+'
         )) {
-            is PNumber -> (editor.value as PNumberEditor).setValue(answer, (editor.value as PNumberEditor))
-            is FractionNumber -> editor.value.setValue(answer)
+            is PNumber -> (_editorStateFlow.value as PNumberEditor).setValue(
+                answer,
+                (_editorStateFlow.value as PNumberEditor)
+            )
+            is FractionNumber -> _editorStateFlow.value.setValue(answer)
         }
     }
 
     fun setFractionEditor() {
-        processor.clear()
-        editor.value = FractionNumberEditor()
+        clearLastOperation()
+        _editorStateFlow.value = FractionNumberEditor()
     }
 
     fun setPNumberEditor() {
+        clearLastOperation()
+        _editorStateFlow.value = PNumberEditor()
+    }
+
+    fun clearLastOperation() {
         processor.clear()
-        editor.value = PNumberEditor()
     }
 }

@@ -15,7 +15,9 @@ class FractionNumberEditor : Editor() {
 
     override fun addDelim(): String {
         return _expression.value.apply {
-            if(isNotEmpty() && last() != delimiter && count { it == delimiter } < 2)
+            if (!contains(delimiter))
+                _expression.value += delimiter
+            if (count { it == delimiter } < 2 && contains(OPERATORS_FRACTION))
                 _expression.value += delimiter
         }
     }
@@ -24,7 +26,7 @@ class FractionNumberEditor : Editor() {
         if (operators.contains(operator)) {
             if (operators.contains(_expression.value.last())) bs()
             _expression.value.apply {
-                if(!contains(OPERATORS_FRACTION) && contains(delimiter)) {
+                if (!contains(OPERATORS_FRACTION) && contains(delimiter)) {
                     _expression.value += operator
                 }
             }

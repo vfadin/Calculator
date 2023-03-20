@@ -3,7 +3,6 @@ package com.example.calculator.ui
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -46,43 +45,32 @@ class FirstFragment : Fragment() {
     }
 
     private fun bindUi() {
-        with(binding){
+        with(binding) {
             lifecycleScope.launch {
-                viewModel._editor.collect { ed ->
+                val width = requireContext().applicationContext.resources.displayMetrics.widthPixels
+                viewModel.editorStateFlow.collect { ed ->
                     launch {
-                        ed.expression.collect {
-                            binding.textField.setText(it)
-                        }
-                    }
-                    launch {
-                        val width = requireContext().applicationContext.resources.displayMetrics.widthPixels
                         val height = (width - 32) / ed.SPAN_COUNT
                         buttonBs.layoutParams.let {
                             it.width = height
                             it.height = height
                         }
-                        buttonEqual.apply {
-                            layoutParams.let {
-                                it.width = height
-                                it.height = height
-                            }
-                            setOnClickListener { viewModel.onEqualClick() }
+                        buttonEqualLayout.layoutParams.let {
+                            it.width = height
+                            it.height = height
                         }
-                        buttonBs.apply {
-                            layoutParams.let {
-                                it.width = height
-                                it.height = height
-                            }
-                            setOnClickListener { viewModel.onBsClick() }
+                        buttonEqual.setOnClickListener { viewModel.onEqualClick() }
+                        buttonBsLayout.layoutParams.let {
+                            it.width = height
+                            it.height = height
                         }
-                        buttonCancel.apply {
-                            layoutParams.let {
-                                it.width = height
-                                it.height = height
-                            }
-                            setOnClickListener { viewModel.onCancelClick() }
+                        buttonBs.setOnClickListener { viewModel.onBsClick() }
+                        buttonCancelLayout.layoutParams.let {
+                            it.width = height
+                            it.height = height
                         }
-                        if(ed is PNumberEditor) {
+                        buttonCancel.setOnClickListener { viewModel.onCancelClick() }
+                        if (ed is PNumberEditor) {
                             slider.visibility = VISIBLE
                             slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                                 override fun onStartTrackingTouch(slider: Slider) {
@@ -90,7 +78,8 @@ class FirstFragment : Fragment() {
                                 }
 
                                 override fun onStopTrackingTouch(slider: Slider) {
-                                    ed.base = slider.value.roundToInt()
+                                    viewModel.clearLastOperation()
+                                    ed.setBase(slider.value.roundToInt())
                                 }
                             })
                         }
@@ -104,6 +93,11 @@ class FirstFragment : Fragment() {
                             })
                         keyboard.layoutManager =
                             GridLayoutManager(requireContext(), ed.SPAN_COUNT)
+                    }
+                    launch {
+                        ed.expression.collect {
+                            binding.textField.setText(it)
+                        }
                     }
                     adapter.updateData(ed.keyboardValues)
                 }

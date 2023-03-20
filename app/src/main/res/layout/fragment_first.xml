@@ -59,43 +59,65 @@
 
         <com.google.android.material.slider.Slider
             android:id="@+id/slider"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="false"
             android:stepSize="1.0"
             android:valueFrom="2.0"
             android:valueTo="16.0"
-            app:layout_constraintBottom_toTopOf="@id/button_equal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/button_equal_layout"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/button_equal"
-            android:layout_width="66dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_shape"
-            android:text="="
+        <FrameLayout
+            android:id="@+id/button_equal_layout"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="1dp"
             app:layout_constraintBottom_toTopOf="@id/keyboard"
-            app:layout_constraintEnd_toStartOf="@id/button_cancel"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/button_cancel_layout"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/button_cancel"
-            android:layout_width="66dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_shape"
-            android:paddingHorizontal="16dp"
-            android:text="C"
-            app:layout_constraintBottom_toTopOf="@id/keyboard"
-            app:layout_constraintStart_toEndOf="@id/button_equal" />
+            <Button
+                android:id="@+id/button_equal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_shape"
+                android:text="=" />
+        </FrameLayout>
 
-        <Button
-            android:id="@+id/button_bs"
-            android:layout_width="66dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_shape"
-            android:text="BS"
+        <FrameLayout
+            android:id="@+id/button_cancel_layout"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="1dp"
             app:layout_constraintBottom_toTopOf="@id/keyboard"
-            app:layout_constraintStart_toEndOf="@id/button_cancel" />
+            app:layout_constraintStart_toEndOf="@id/button_equal_layout">
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_shape"
+                android:paddingHorizontal="16dp"
+                android:text="C" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/button_bs_layout"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="1dp"
+            app:layout_constraintBottom_toTopOf="@id/keyboard"
+            app:layout_constraintStart_toEndOf="@id/button_cancel_layout">
+
+            <Button
+                android:id="@+id/button_bs"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_shape"
+                android:text="BS" />
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/keyboard"

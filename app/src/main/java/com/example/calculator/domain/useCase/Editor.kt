@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 abstract class Editor {
     protected open val delimiter = '.'
-    private val zero = "0"
+    protected val zero = "0"
     private val operators = "+-/*"
     protected val _expression = MutableStateFlow("0")
     val expression = _expression.asStateFlow()
@@ -49,10 +49,10 @@ abstract class Editor {
     fun addZero() = addDigit(0)
 
     open fun addDelim(): String {
-        if (_expression.value.isNotEmpty() && !_expression.value.contains(delimiter)) {
-            _expression.value += delimiter
+        return _expression.value.apply {
+            if (!contains(delimiter) || (count { it == delimiter } < 2 && contains(OPERATORS)))
+                _expression.value += delimiter
         }
-        return _expression.value
     }
 
     fun bs(): String {
