@@ -33,15 +33,13 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     fun onEqualClick() {
         try {
-            viewModelScope.launch {
-                checkSqr()
-                when (_editorStateFlow.value) {
-                    is PNumberEditor -> {
-                        calculatePNumber()
-                    }
-                    is FractionNumberEditor -> {
-                        calculateFractionNumber()
-                    }
+            checkSqr()
+            when (_editorStateFlow.value) {
+                is PNumberEditor -> {
+                    calculatePNumber()
+                }
+                is FractionNumberEditor -> {
+                    calculateFractionNumber()
                 }
             }
         } catch (e: Exception) {
@@ -49,8 +47,8 @@ class MainViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private suspend fun checkSqr(): Boolean {
-        if (_editorStateFlow.value.expression.first() == "√") {
+    private fun checkSqr(): Boolean {
+        if (_editorStateFlow.value.expression.value.first() == '√') {
             var leftOperand: INumber = PNumber("0", 2, 0)
             _editorStateFlow.value.let {
                 when (it) {
