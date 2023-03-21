@@ -29,13 +29,17 @@ class MainViewModel @Inject constructor() : ViewModel() {
     fun onCancelClick() = _editorStateFlow.value.clear()
 
     fun onEqualClick() {
-        when (_editorStateFlow.value) {
-            is PNumberEditor -> {
-                calculatePNumber()
+        try {
+            when (_editorStateFlow.value) {
+                is PNumberEditor -> {
+                    calculatePNumber()
+                }
+                is FractionNumberEditor -> {
+                    calculateFractionNumber()
+                }
             }
-            is FractionNumberEditor -> {
-                calculateFractionNumber()
-            }
+        } catch (e: Exception) {
+            println(e)
         }
     }
 
@@ -63,7 +67,6 @@ class MainViewModel @Inject constructor() : ViewModel() {
                     operator
                 )
             }
-
         }
     }
 
