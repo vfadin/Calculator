@@ -4,6 +4,9 @@ import com.example.calculator.domain.useCase.Editor
 import com.example.calculator.utils.Constants
 
 class ComplexNumberEditor : Editor() {
+    override val keyboardValues = listOf(
+        "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", "+"
+    )
 //    private val delimiter = '/'
 //    private val operators = "+-*"
 //

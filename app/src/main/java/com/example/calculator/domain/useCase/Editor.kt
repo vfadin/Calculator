@@ -73,6 +73,8 @@ abstract class Editor {
         addDelim()
     } else if (operators.contains(c)) {
         addOperator(c)
+    } else if (c == '√') {
+        addSqrt(c)
     } else {
         addDigit(charToInt(c))
     }

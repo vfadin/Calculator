@@ -1,6 +1,7 @@
 package com.example.calculator.domain.useCase.fractionNumber
 
 import com.example.calculator.domain.useCase.INumber
+import kotlin.math.sqrt
 
 class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
     var numerator = 0L
@@ -16,21 +17,22 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
     override fun plus(a: INumber): INumber {
         if ((a as FractionNumber).denominator == 0L) return this
         if (denominator == 0L) return a
-        val cDenominator = lcm(a.denominator, denominator)
-        val cNumerator = a.numerator * (cDenominator / a.denominator) +
-                numerator * (cDenominator / denominator)
+        val cDenominator: Long = lcm(a.denominator, denominator)
+        val cNumerator: Long =
+            a.numerator * (cDenominator / a.denominator) + numerator * (cDenominator / denominator)
         return simplify(FractionNumber(cNumerator, cDenominator))
     }
 
     override fun minus(a: INumber): INumber {
-        if ((a as FractionNumber).denominator == 0L) {
-            numerator *= -1
-            return this
+        if (denominator == 0L) {
+            (a as FractionNumber).numerator *= -1
+            return a
         }
-        if (denominator == 0L) return a
+        if ((a as FractionNumber).denominator == 0L) return this
+//        if (denominator == 0L) return a
         val cDenominator: Long = lcm(a.denominator, denominator)
-        val cNumerator: Long = a.numerator * (cDenominator / a.denominator) -
-                numerator * (cDenominator / denominator)
+        val cNumerator: Long = numerator * (cDenominator / denominator) -
+                a.numerator * (cDenominator / a.denominator)
         return simplify(FractionNumber(cNumerator, cDenominator))
     }
 
@@ -64,6 +66,15 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
     }
 
     override fun toString(): String {
+        if (denominator < 0 || numerator > 0) {
+            return "-$numerator/${denominator * -1}"
+        }
+        if (denominator == 0L || numerator == 0L) {
+            return "0"
+        }
+        if (denominator == 1L) {
+            return "$numerator"
+        }
         return "$numerator/$denominator"
     }
 
@@ -77,5 +88,12 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
 
     private fun lcm(a: Long, b: Long): Long {
         return a * b / gcd(a, b)
+    }
+
+    override fun squared(): INumber {
+        return FractionNumber(
+            sqrt(numerator.toDouble()).toLong(),
+            sqrt(denominator.toDouble()).toLong()
+        )
     }
 }

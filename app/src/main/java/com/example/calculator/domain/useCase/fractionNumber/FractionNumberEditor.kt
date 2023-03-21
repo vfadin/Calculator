@@ -8,6 +8,9 @@ import com.example.calculator.utils.Constants.Companion.OPERATORS_FRACTION
 class FractionNumberEditor : Editor() {
     override val delimiter = '/'
     private val operators = "+-*"
+    override val keyboardValues = listOf(
+        "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", "+", "√"
+    )
 
     fun setValue(answer: String) {
         _expression.value = answer
