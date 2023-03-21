@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    private val _editorStateFlow = MutableStateFlow<Editor>(PNumberEditor())
+    private val _editorStateFlow = MutableStateFlow<Editor>(FractionNumberEditor())
     val editorStateFlow = _editorStateFlow.asStateFlow()
     private val processor = Processor()
     val lastOperation = processor.lastOperation
@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     private fun checkSqr(): Boolean {
         if (_editorStateFlow.value.expression.value.first() == '√') {
-            var leftOperand: INumber = PNumber("0", 2, 0)
+            lateinit var leftOperand: INumber
             _editorStateFlow.value.let {
                 when (it) {
                     is PNumberEditor -> {
@@ -68,7 +68,9 @@ class MainViewModel @Inject constructor() : ViewModel() {
                     }
                 }
             }
-            processor.calculate(leftOperand, leftOperand, '√')
+            _editorStateFlow.value.setValue(
+                processor.calculate(leftOperand, leftOperand, '√')
+            )
             return true
         }
         return false

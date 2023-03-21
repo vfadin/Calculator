@@ -1,6 +1,7 @@
 package com.example.calculator.domain.useCase.fractionNumber
 
 import com.example.calculator.domain.useCase.INumber
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
@@ -66,7 +67,7 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
     }
 
     override fun toString(): String {
-        if (denominator < 0 || numerator > 0) {
+        if (denominator < 0 && numerator > 0) {
             return "-$numerator/${denominator * -1}"
         }
         if (denominator == 0L || numerator == 0L) {
@@ -91,9 +92,14 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
     }
 
     override fun squared(): INumber {
-        return FractionNumber(
-            sqrt(numerator.toDouble()).toLong(),
-            sqrt(denominator.toDouble()).toLong()
-        )
+        var numerator = numerator.toDouble().pow(0.5).toLong()
+        var denominator = denominator.toDouble().pow(0.5).toLong()
+        if (numerator * numerator != this.numerator) {
+            numerator = this.numerator
+        }
+        if (denominator * denominator != this.denominator) {
+            denominator = this.denominator
+        }
+        return FractionNumber(numerator, denominator)
     }
 }
