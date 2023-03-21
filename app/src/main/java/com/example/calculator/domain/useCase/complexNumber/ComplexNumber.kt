@@ -38,7 +38,7 @@ class ComplexNumber(real: Double, imaginary: Double) : INumber {
         return ComplexNumber(newReal, newImaginary)
     }
 
-    fun squared(): INumber {
+    override fun squared(): INumber {
         val newReal = real * real - imaginary * imaginary
         val newImaginary = 2 * real * imaginary
         return ComplexNumber(newReal, newImaginary)

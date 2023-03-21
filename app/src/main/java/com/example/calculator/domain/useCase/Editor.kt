@@ -7,10 +7,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 abstract class Editor {
-    protected open val delimiter = '.'
+    open val delimiter = '.'
     protected val zero = "0"
     private val operators = "+-/*"
     protected val _expression = MutableStateFlow("0")
+    protected val isSqr = _expression.value.contains("√")
     val expression = _expression.asStateFlow()
     open val keyboardValues = listOf(
         "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", ".", "+"
@@ -22,6 +23,7 @@ abstract class Editor {
     }
 
     open fun addOperator(operator: Char): String {
+        if (isSqr) return _expression.value
         if (operators.contains(operator)) {
             if (operators.contains(_expression.value.last())) bs()
             if (!_expression.value.contains(OPERATORS)) _expression.value += operator
@@ -77,5 +79,10 @@ abstract class Editor {
         addSqrt(c)
     } else {
         addDigit(charToInt(c))
+    }
+
+    private fun addSqrt(c: Char): String {
+        _expression.value = c.toString()
+        return _expression.value
     }
 }

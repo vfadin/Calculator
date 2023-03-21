@@ -17,6 +17,7 @@ class Processor {
             '-' -> leftOperand - rightOperand
             '*' -> leftOperand * rightOperand
             '/' -> leftOperand / rightOperand
+            '√' -> leftOperand.squared()
             else -> leftOperand
         }
         return answer

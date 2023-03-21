@@ -35,4 +35,8 @@ class PNumber(number: String, base: Int, acc: Int) : INumber {
     override fun times(a: INumber): INumber {
         return PNumber(doP(number * (a as PNumber).number, 16, acc), base, acc)
     }
+
+    override fun squared(): INumber {
+        TODO("Not yet implemented")
+    }
 }

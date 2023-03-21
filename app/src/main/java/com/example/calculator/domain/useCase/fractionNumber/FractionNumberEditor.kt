@@ -26,6 +26,7 @@ class FractionNumberEditor : Editor() {
     }
 
     override fun addOperator(operator: Char): String {
+        if (isSqr) return _expression.value
         if (operators.contains(operator)) {
             if (operators.contains(_expression.value.last())) bs()
             _expression.value.apply {
