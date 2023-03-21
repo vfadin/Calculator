@@ -6,7 +6,7 @@ class PNumberEditor : Editor() {
     override val SPAN_COUNT = 5
     override val keyboardValues = listOf(
         "C", "D", "E", "F", "/", "8", "9", "A", "B", "*", "4", "5", "6", "7", "-", "0",
-        "1", "2", "3", "+", "."
+        "1", "2", "3", "+", ".", "√"
     )
     var base = 16
         private set

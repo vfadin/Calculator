@@ -1,7 +1,6 @@
 package com.example.calculator.ui
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.calculator.domain.useCase.Editor
 import com.example.calculator.domain.useCase.INumber
 import com.example.calculator.domain.useCase.fractionNumber.FractionNumber
@@ -14,13 +13,11 @@ import com.example.calculator.utils.Constants.Companion.OPERATORS_FRACTION
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    private val _editorStateFlow = MutableStateFlow<Editor>(FractionNumberEditor())
+    private val _editorStateFlow = MutableStateFlow<Editor>(PNumberEditor())
     val editorStateFlow = _editorStateFlow.asStateFlow()
     private val processor = Processor()
     val lastOperation = processor.lastOperation
@@ -29,19 +26,22 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     fun onBsClick() = _editorStateFlow.value.bs()
 
-    fun onCancelClick() = _editorStateFlow.value.clear()
+    fun onCancelClick() {
+        clearLastOperation()
+        _editorStateFlow.value.clear()
+    }
 
     fun onEqualClick() {
         try {
-            checkSqr()
-            when (_editorStateFlow.value) {
-                is PNumberEditor -> {
-                    calculatePNumber()
+            if (!checkSqr())
+                when (_editorStateFlow.value) {
+                    is PNumberEditor -> {
+                        calculatePNumber()
+                    }
+                    is FractionNumberEditor -> {
+                        calculateFractionNumber()
+                    }
                 }
-                is FractionNumberEditor -> {
-                    calculateFractionNumber()
-                }
-            }
         } catch (e: Exception) {
             println(e)
         }
@@ -68,12 +68,33 @@ class MainViewModel @Inject constructor() : ViewModel() {
                     }
                 }
             }
-            _editorStateFlow.value.setValue(
-                processor.calculate(leftOperand, leftOperand, '√')
-            )
+            val answer = processor.calculate(leftOperand, leftOperand, '√')
+            if (answer is FractionNumber) {
+                fractionNumberAnswer(answer, leftOperand)
+            } else {
+                _editorStateFlow.value.setValue(answer)
+            }
             return true
         }
         return false
+    }
+
+    private fun fractionNumberAnswer(answer: FractionNumber, leftOperand: INumber) {
+        var stringAnswer = ""
+        if (answer.numerator == (leftOperand as FractionNumber).numerator) {
+            if (answer.numerator != 1L) stringAnswer += "√"
+        }
+        stringAnswer += "${answer.numerator}/"
+        if (answer.denominator == 1L) {
+            stringAnswer = stringAnswer.substring(0 until stringAnswer.lastIndex)
+            _editorStateFlow.value.setValue(stringAnswer)
+            return
+        }
+        if (answer.denominator == leftOperand.denominator) {
+            stringAnswer += "√"
+        }
+        stringAnswer += "${answer.denominator}"
+        _editorStateFlow.value.setValue(stringAnswer)
     }
 
     private fun calculateFractionNumber() {

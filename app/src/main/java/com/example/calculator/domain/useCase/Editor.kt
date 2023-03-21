@@ -22,6 +22,10 @@ abstract class Editor {
         _expression.value = number.toString()
     }
 
+    fun setValue(text: String) {
+        _expression.value = text
+    }
+
     open fun addOperator(operator: Char): String {
         if (isSqr) return _expression.value
         if (operators.contains(operator)) {

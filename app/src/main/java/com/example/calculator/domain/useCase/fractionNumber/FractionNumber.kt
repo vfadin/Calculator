@@ -100,6 +100,6 @@ class FractionNumber(numerator: Long, denominator: Long = 1L) : INumber {
         if (denominator * denominator != this.denominator) {
             denominator = this.denominator
         }
-        return FractionNumber(numerator, denominator)
+        return simplify(FractionNumber(numerator, denominator))
     }
 }

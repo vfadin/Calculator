@@ -1,6 +1,7 @@
 package com.example.calculator.domain.useCase.fractionNumber
 
 import com.example.calculator.domain.useCase.Editor
+import com.example.calculator.domain.useCase.INumber
 import com.example.calculator.utils.Constants
 import com.example.calculator.utils.Constants.Companion.OPERATORS
 import com.example.calculator.utils.Constants.Companion.OPERATORS_FRACTION
@@ -11,10 +12,6 @@ class FractionNumberEditor : Editor() {
     override val keyboardValues = listOf(
         "7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "0", "+", "√"
     )
-
-    fun setValue(answer: String) {
-        _expression.value = answer
-    }
 
     override fun addDelim(): String {
         return _expression.value.apply {

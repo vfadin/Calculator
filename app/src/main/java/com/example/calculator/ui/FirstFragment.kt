@@ -40,6 +40,7 @@ class FirstFragment : Fragment() {
         lifecycleScope.launch {
             launch {
                 viewModel.lastOperation.collect {
+                    println(it)
                     binding.textViewLastOperation.text = it
                 }
             }

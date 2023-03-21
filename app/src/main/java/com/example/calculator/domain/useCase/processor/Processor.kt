@@ -1,6 +1,7 @@
 package com.example.calculator.domain.useCase.processor
 
 import com.example.calculator.domain.useCase.INumber
+import com.example.calculator.domain.useCase.fractionNumber.FractionNumber
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -12,7 +13,7 @@ class Processor {
 
     fun calculate(leftOperand: INumber, rightOperand: INumber, operator: Char): INumber {
         _lastOperation.value = "$leftOperand $operator $rightOperand"
-        answer = when(operator) {
+        answer = when (operator) {
             '+' -> leftOperand + rightOperand
             '-' -> leftOperand - rightOperand
             '*' -> leftOperand * rightOperand
@@ -26,7 +27,7 @@ class Processor {
         return answer
     }
 
-     fun clear() {
-         _lastOperation.value = ""
-     }
+    fun clear() {
+        _lastOperation.value = ""
+    }
 }
