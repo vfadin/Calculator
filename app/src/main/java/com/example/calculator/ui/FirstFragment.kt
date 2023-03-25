@@ -116,6 +116,10 @@ class FirstFragment : Fragment() {
                         viewModel.setPNumberEditor()
                         true
                     }
+                    R.id.action_complex -> {
+                        viewModel.setComplexEditor()
+                        true
+                    }
                     else -> false
                 }
             }

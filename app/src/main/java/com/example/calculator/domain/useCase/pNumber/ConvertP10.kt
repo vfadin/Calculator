@@ -6,6 +6,8 @@ import kotlin.math.pow
 class ConvertP10 {
     companion object {
         fun charToInt(c: Char): Int {
+//            if (c == 'i') {
+//            }
             val index = "0123456789ABCDEF".indexOf(c)
             if (index == -1) {
                 throw IndexOutOfBoundsException()

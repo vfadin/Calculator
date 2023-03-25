@@ -24,6 +24,7 @@ class Processor {
             }
             else -> leftOperand
         }
+        println(answer)
         return answer
     }
 

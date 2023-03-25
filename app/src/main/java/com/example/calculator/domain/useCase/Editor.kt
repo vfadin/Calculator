@@ -1,5 +1,6 @@
 package com.example.calculator.domain.useCase
 
+import com.example.calculator.domain.useCase.complexNumber.ComplexNumber
 import com.example.calculator.domain.useCase.pNumber.Convert10p.Companion.intToChar
 import com.example.calculator.domain.useCase.pNumber.ConvertP10.Companion.charToInt
 import com.example.calculator.utils.Constants.Companion.OPERATORS
@@ -24,6 +25,14 @@ abstract class Editor {
 
     fun setValue(text: String) {
         _expression.value = text
+    }
+
+    fun setComplex(number: ComplexNumber) {
+        if (number.imaginary < 0) {
+            _expression.value = number.real.toString() + "-i*" + (-1 * number.imaginary).toString()
+        } else {
+            _expression.value = number.real.toString() + "+i*" + number.imaginary.toString()
+        }
     }
 
     open fun addOperator(operator: Char): String {
@@ -81,8 +90,15 @@ abstract class Editor {
         addOperator(c)
     } else if (c == '√') {
         addSqrt(c)
+    } else if (c == 'i') {
+        addImg()
     } else {
         addDigit(charToInt(c))
+    }
+
+    fun addImg(): String {
+        _expression.value += "i*"
+        return _expression.value
     }
 
     private fun addSqrt(c: Char): String {
