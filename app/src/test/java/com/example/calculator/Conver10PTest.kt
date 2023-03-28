@@ -15,11 +15,8 @@ class Convert10PTest {
         intToChar(16)
     }
 
-
-//    @Test(expected = IllegalArgumentException::class)
     @Test
     fun testIntToP() {
-//        intToP(1, 111)
         assertEquals("1101", intToP(13, 2))
         assertEquals("D", intToP(13, 16))
         assertEquals("14", intToP(20, 16))

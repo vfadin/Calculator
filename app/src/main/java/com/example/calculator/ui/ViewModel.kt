@@ -73,7 +73,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                         val slices = it.expression.value.substring(1).split(it.delimiter)
                         leftOperand = FractionNumber(
                             slices.getOrElse(0) { "0" }.toLong(),
-                            slices.getOrElse(1) { "0" }.toLong(),
+                            slices.getOrElse(1) { "1" }.toLong(),
                         )
                     }
                     is ComplexNumberEditor -> {

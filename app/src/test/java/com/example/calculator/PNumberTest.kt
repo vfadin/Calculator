@@ -20,7 +20,7 @@ class PNumberTest {
         val a = PNumber("1", 10, 1)
         val b = PNumber("2", 10, 1)
         val c = a - b
-        Assert.assertEquals("-1", c.toString())
+        Assert.assertEquals("-1.0", c.toString())
     }
 
     @Test

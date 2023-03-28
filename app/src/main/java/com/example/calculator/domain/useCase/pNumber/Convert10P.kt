@@ -1,5 +1,7 @@
 package com.example.calculator.domain.useCase.pNumber
 
+import kotlin.math.abs
+
 class Convert10p {
     companion object {
         /**
@@ -23,13 +25,14 @@ class Convert10p {
             if (n == 0L) {
                 return "0"
             }
-            var x = n
+            var x = abs(n)
             var result = ""
             while (x > 0) {
                 val digit = x % p
                 result += (intToChar(digit.toInt()))
                 x /= p
             }
+            result += if (n < 0) "-" else ""
             return result.reversed()
         }
 

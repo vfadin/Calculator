@@ -31,6 +31,7 @@ class ConvertP10 {
             val parts = pValue.split(".")
             var integerPart = 0.0
             for (i in parts[0].indices) {
+                if (parts[0][i] == '-') continue
                 integerPart += charToInt(parts[0][i]) * p.toDouble()
                     .pow((parts[0].length - 1 - i).toDouble())
             }
@@ -41,7 +42,7 @@ class ConvertP10 {
                         .pow(-(i + 1).toDouble())
                 }
             }
-            return integerPart + fractionalPart
+            return (integerPart + fractionalPart) * if (pValue.first() == '-') -1 else 1
         }
     }
 }
