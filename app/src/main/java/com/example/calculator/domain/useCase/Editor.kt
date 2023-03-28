@@ -59,7 +59,9 @@ abstract class Editor {
 
     fun acc() =
         if (_expression.value.contains(delimiter))
-            _expression.value.length - _expression.value.indexOf(delimiter) - 1
+            _expression.value.substring(
+                0.._expression.value.indexOfFirst { it.toString().matches(OPERATORS) }
+            ).substringAfter(delimiter).length - 1
         else 0
 
     fun addZero() = addDigit(0)

@@ -38,4 +38,10 @@ class PNumberEditorTest {
         editor.setBase(10)
         assertEquals(10, editor.base)
     }
+    @Test
+    fun textAcc() {
+        val editor = PNumberEditor()
+        editor.setValue("1.0+5.0")
+        assertEquals(1, editor.acc())
+    }
 }
