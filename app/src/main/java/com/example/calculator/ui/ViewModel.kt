@@ -32,6 +32,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
     fun onBsClick() = _editorStateFlow.value.bs()
 
     fun onCancelClick() {
+        _errorStateFlow.value = ""
         clearLastOperation()
         _editorStateFlow.value.clear()
     }

@@ -110,6 +110,7 @@ class FirstFragment : Fragment() {
         with(binding) {
             toolbar.inflateMenu(R.menu.menu_main)
             toolbar.setOnMenuItemClickListener {
+                textInputLayout.error = null
                 when (it.itemId) {
                     R.id.action_fraction -> {
                         viewModel.setFractionEditor()
