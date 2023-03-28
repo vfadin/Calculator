@@ -50,7 +50,7 @@ class ComplexNumber(real: Double, imaginary: Double) : INumber {
         )
     }
 
-    private fun abs(): Double {
+    fun abs(): Double {
         return sqrt(real * real + imaginary * imaginary)
     }
 
