@@ -37,6 +37,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onEqualClick() {
+        _errorStateFlow.value = ""
         try {
             if (!checkSqr())
                 when (_editorStateFlow.value) {
