@@ -1,7 +1,6 @@
 package com.example.calculator.domain.useCase.complexNumber
 
 import com.example.calculator.domain.useCase.INumber
-import java.lang.Math.pow
 import kotlin.math.*
 
 

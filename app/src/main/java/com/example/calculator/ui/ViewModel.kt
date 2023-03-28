@@ -83,7 +83,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                             println("Real part: $realPartFirst")
                             println("Imaginary part: $imaginaryPartFirst")
                         } else {
-                            println("No match found")
+                            throw IndexOutOfBoundsException()
                         }
                         leftOperand = ComplexNumber(realPartFirst, imaginaryPartFirst)
                     }
@@ -101,25 +101,6 @@ class MainViewModel @Inject constructor() : ViewModel() {
         }
         return false
     }
-
-//    private fun complexNumberAnswer(answer: ComplexNumber, leftOperand: INumber) {
-//        var stringAnswer = ""
-//        if (answer.numerator == (leftOperand as FractionNumber).numerator) {
-//            if (answer.numerator != 1L) stringAnswer += "√"
-//        }
-//        stringAnswer += "${answer.numerator}/"
-//        if (answer.denominator == 1L) {
-//            stringAnswer = stringAnswer.substring(0 until stringAnswer.lastIndex)
-//            _editorStateFlow.value.setValue(stringAnswer)
-//            return
-//        }
-//        if (answer.denominator == leftOperand.denominator) {
-//            stringAnswer += "√"
-//        }
-//        stringAnswer += "${answer.denominator}"
-//        _editorStateFlow.value.setValue(stringAnswer)
-//
-//    }
 
     private fun fractionNumberAnswer(answer: FractionNumber, leftOperand: INumber) {
         var stringAnswer = ""
@@ -168,7 +149,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 println("Real part: $realPartFirst")
                 println("Imaginary part: $imaginaryPartFirst")
             } else {
-                println("No match found")
+                throw IndexOutOfBoundsException()
             }
             matchResult = COMPLEX_NUMBER_PATTERN.find(secondExpression)
             if (matchResult != null) {
@@ -178,7 +159,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 println("Real part: $realPartSecond")
                 println("Imaginary part: $imaginaryPartSecond")
             } else {
-                println("No match found")
+                throw IndexOutOfBoundsException()
             }
             calculate(
                 ComplexNumber(
