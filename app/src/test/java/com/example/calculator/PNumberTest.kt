@@ -28,7 +28,7 @@ class PNumberTest {
         val a = PNumber("1", 10, 1)
         val b = PNumber("2", 10, 1)
         val c = a * b
-        Assert.assertEquals("2", c.toString())
+        Assert.assertEquals("2.0", c.toString())
     }
 
     @Test
@@ -43,7 +43,7 @@ class PNumberTest {
     fun testSquared() {
         val a = PNumber("4", 10, 1)
         val b = a.squared()
-        Assert.assertEquals("2", b.toString())
+        Assert.assertEquals("2.0", b.toString())
     }
 
 
