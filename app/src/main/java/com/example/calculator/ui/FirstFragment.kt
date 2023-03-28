@@ -44,6 +44,9 @@ class FirstFragment : Fragment() {
                     binding.textViewLastOperation.text = it
                 }
             }
+            viewModel.errorStateFlow.collect {
+                binding.textField.error = it
+            }
         }
     }
 

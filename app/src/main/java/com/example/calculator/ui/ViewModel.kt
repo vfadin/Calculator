@@ -22,6 +22,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor() : ViewModel() {
     private val _editorStateFlow = MutableStateFlow<Editor>(ComplexNumberEditor())
     val editorStateFlow = _editorStateFlow.asStateFlow()
+    private val _errorStateFlow = MutableStateFlow("")
+    val errorStateFlow = _errorStateFlow.asStateFlow()
     private val processor = Processor()
     val lastOperation = processor.lastOperation
 
@@ -49,6 +51,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                     }
                 }
         } catch (e: Exception) {
+            _errorStateFlow.value = e.message ?: ""
             println(e)
         }
     }
@@ -83,7 +86,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                             println("Real part: $realPartFirst")
                             println("Imaginary part: $imaginaryPartFirst")
                         } else {
-                            throw IndexOutOfBoundsException()
+                            throw IllegalArgumentException("Используйте выражение в формате √0.0+i*0.0")
                         }
                         leftOperand = ComplexNumber(realPartFirst, imaginaryPartFirst)
                     }
@@ -149,7 +152,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 println("Real part: $realPartFirst")
                 println("Imaginary part: $imaginaryPartFirst")
             } else {
-                throw IndexOutOfBoundsException()
+                throw IllegalArgumentException("Используйте выражение в формате 0.0+i*0.0")
             }
             matchResult = COMPLEX_NUMBER_PATTERN.find(secondExpression)
             if (matchResult != null) {
@@ -159,7 +162,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 println("Real part: $realPartSecond")
                 println("Imaginary part: $imaginaryPartSecond")
             } else {
-                throw IndexOutOfBoundsException()
+                throw IllegalArgumentException("Используйте выражение в формате 0.0+i*0.0")
             }
             calculate(
                 ComplexNumber(
