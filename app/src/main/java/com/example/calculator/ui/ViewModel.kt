@@ -194,11 +194,11 @@ class MainViewModel @Inject constructor() : ViewModel() {
                 calculate(
                     FractionNumber(
                         leftOperand.getOrElse(0) { "0" }.toLong(),
-                        leftOperand.getOrElse(1) { "0" }.toLong(),
+                        leftOperand.getOrElse(1) { "1" }.toLong(),
                     ),
                     FractionNumber(
                         rightOperand.getOrElse(0) { "0" }.toLong(),
-                        rightOperand.getOrElse(1) { "0" }.toLong(),
+                        rightOperand.getOrElse(1) { "1" }.toLong(),
                     ),
                     operator
                 )

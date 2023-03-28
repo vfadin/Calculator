@@ -1,5 +1,6 @@
 package com.example.calculator.domain.useCase
 
+import androidx.annotation.VisibleForTesting
 import com.example.calculator.domain.useCase.complexNumber.ComplexNumber
 import com.example.calculator.domain.useCase.pNumber.Convert10p.Companion.intToChar
 import com.example.calculator.domain.useCase.pNumber.ConvertP10.Companion.charToInt
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 abstract class Editor {
     open val delimiter = '.'
     protected val zero = "0"
-    private val operators = "+-/*"
+    private val operators = "+-/*:"
     protected val _expression = MutableStateFlow("0")
     protected val isSqr = _expression.value.contains("√")
     val expression = _expression.asStateFlow()
@@ -96,7 +97,8 @@ abstract class Editor {
         addDigit(charToInt(c))
     }
 
-    fun addImg(): String {
+    @VisibleForTesting
+    private fun addImg(): String {
         _expression.value += "i*"
         return _expression.value
     }

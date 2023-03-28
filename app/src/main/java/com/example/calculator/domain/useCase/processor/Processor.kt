@@ -17,14 +17,13 @@ class Processor {
             '+' -> leftOperand + rightOperand
             '-' -> leftOperand - rightOperand
             '*' -> leftOperand * rightOperand
-            '/' -> leftOperand / rightOperand
+            '/', ':' -> leftOperand / rightOperand
             '√' -> {
                 _lastOperation.value = "$operator$leftOperand"
                 leftOperand.squared()
             }
             else -> leftOperand
         }
-        println(answer)
         return answer
     }
 

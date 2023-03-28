@@ -45,7 +45,7 @@ class FirstFragment : Fragment() {
                 }
             }
             viewModel.errorStateFlow.collect {
-                binding.textField.error = it
+                if (it.isNotEmpty()) binding.textInputLayout.error = it
             }
         }
     }
